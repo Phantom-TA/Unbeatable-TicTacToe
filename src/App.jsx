@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './App.css'
 import GameBoard from './components/GameBoard.jsx';
+import { winning_cases } from '../utils/winning_cases.js';
+import Gameover from './components/GameOver.jsx';
 
 function App() {
   const [selections ,setSelections] =useState([]);
@@ -34,9 +36,63 @@ function App() {
         return updatedSelections;
      })
   }
+  
+  const handleWinner =() =>{
+      const board=boardSetup();
+      let winner ;
+      for(const win_case of winning_cases ){
+        const firstSymbol = board[win_case[0].row][win_case[0].col];
+        const secondSymbol = board[win_case[1].row][win_case[1].col];
+        const thirdSymbol = board[win_case[2].row][win_case[2].col];
+      
+
+      if(firstSymbol && (firstSymbol === secondSymbol) && (firstSymbol === thirdSymbol))
+      {
+        if(firstSymbol === 'X')
+          winner = 1
+        else
+         winner = 2
+      }
+    }
+
+      return winner;
+  }
+
+  const winner = handleWinner();
+  console.log(winner)
+  const isDraw = selections.length === 9 && !winner;
+
+  const handleRestart = () =>{
+    
+    setSelections([]);
+  }
+  useEffect( ( ) => { 
+    const currentPlayer = handleActivePlayer(selections);
+    if(currentPlayer === 'O' && !winner){
+      const board = boardSetup();
+      const empty = [];
+      for(let row =0;row< 3;row++){
+        for(let col=0;col< 3;col++){
+          if(board[row][col] === null)
+            empty.push({row,col});
+        }
+      }
+
+      if(empty.length > 0){
+        const random = Math.floor(Math.random() * empty.length);
+        const {row,col}=empty[random];
+
+        const timeout = setTimeout(()=>{handleSelection(row,col)}, 500);
+        return () => clearTimeout(timeout);
+      }
+    }
+  } , [selections]);
+
+
   return (
     <div className='home-page'>
-      <div className='game-container' >
+      <div className='game-container' > 
+        { (winner || isDraw) && <Gameover winner={winner} restart ={handleRestart}/>}
         <GameBoard  onSelect={handleSelection} board={boardSetup()}/>
       </div>
     </div>

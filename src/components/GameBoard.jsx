@@ -8,7 +8,7 @@ const GameBoard =({onSelect , board})=>{
                                 {
                                     row.map((symbol,colInd)=>(
                                         <li key={colInd}>
-                                            <button onClick={()=>onSelect(rowInd,colInd)}>{symbol}</button>
+                                            <button onClick={()=>onSelect(rowInd,colInd)} disabled={symbol!==null}>{symbol}</button>
                                         </li>
                                     ))
                                 }
