@@ -7,6 +7,8 @@ import Gameover from './components/GameOver.jsx';
 
 function App() {
   const [selections ,setSelections] =useState([]);
+  const [flag , setFlag] =useState(0);
+  const [initialPlayer , setInitialPlayer] =useState('X')
   const initialBoard = [ 
     [null,null,null],
     [null,null,null],
@@ -23,6 +25,8 @@ function App() {
      return board;
   }
   const handleActivePlayer = (selections) =>{
+        if(selections.length === 0)
+          return initialPlayer
         let currentPlayer = 'X'
         if(selections.length > 0 && selections[0].player === 'X')
           currentPlayer = 'O'
@@ -37,36 +41,7 @@ function App() {
      })
   }
   
-  const handleWinner =() =>{
-      const board=boardSetup();
-      let winner ;
-      for(const win_case of winning_cases ){
-        const firstSymbol = board[win_case[0].row][win_case[0].col];
-        const secondSymbol = board[win_case[1].row][win_case[1].col];
-        const thirdSymbol = board[win_case[2].row][win_case[2].col];
-      
-
-      if(firstSymbol && (firstSymbol === secondSymbol) && (firstSymbol === thirdSymbol))
-      {
-        if(firstSymbol === 'X')
-          winner = 1
-        else
-         winner = 2
-      }
-    }
-
-      return winner;
-  }
-
-  const winner = handleWinner();
   
-  const isDraw = selections.length === 9 && !winner;
-
-  const handleRestart = () =>{
-    
-    setSelections([]);
-  }
-
   const possibleWinningCase = (symbol)=>{
      const board = boardSetup();
      let possibleWinCase;
@@ -111,10 +86,10 @@ function App() {
       
      const possibleWinCaseX = possibleWinningCase('X')
      const possibleWinCaseO = possibleWinningCase('O')
-
+     if(selections.length > 0 && selections[selections.length-1].player === 'X'){
       //When user first move is center
       
-      if(selections[selections.length-1].player === 'X' && selections[selections.length-1].block.row === 1 && selections[selections.length-1].block.col === 1){
+      if( selections[selections.length-1].block.row === 1 && selections[selections.length-1].block.col === 1){
          
           if(possibleWinCaseO)
           {  
@@ -146,7 +121,7 @@ function App() {
 
       }
       // when user first move is corner
-      else if (selections[selections.length-1].player === 'X' && ((selections[selections.length-1].block.row === 0 && selections[selections.length-1].block.col === 0) || (selections[selections.length-1].block.row === 0 && selections[selections.length-1].block.col === 2) || (selections[selections.length-1].block.row === 2 && selections[selections.length-1].block.col === 0) || (selections[selections.length-1].block.row === 2 && selections[selections.length-1].block.col === 2)) ){
+      else if ( ((selections[selections.length-1].block.row === 0 && selections[selections.length-1].block.col === 0) || (selections[selections.length-1].block.row === 0 && selections[selections.length-1].block.col === 2) || (selections[selections.length-1].block.row === 2 && selections[selections.length-1].block.col === 0) || (selections[selections.length-1].block.row === 2 && selections[selections.length-1].block.col === 2)) ){
           if(board[1][1] === null)
             return {row:1,col: 1};
            if(possibleWinCaseO)
@@ -258,11 +233,77 @@ function App() {
 
 
       }
+     }
+     //When computer plays first 
+     else{
+       if(empty.length === 9)
+       {
+        return {row:1, col:1};
+       }
+      if(possibleWinCaseO)
+        {  
+            
+        return {row: possibleWinCaseO[0] , col:possibleWinCaseO[1]} 
+
+        }
+      if( possibleWinCaseX)
+        {       
+          return {row: possibleWinCaseX[0] , col:possibleWinCaseX[1]} 
+        }
+      const lRow = selections[0].block.row  //last selected row
+      const lCol = selections[0].block.col  //last selected column 
+      if(selections.length === 2){
+          if( (lRow === 1 && lCol === 0) || (lRow === 0 && lCol === 1) || (lRow === 1 && lCol === 2) || (lRow === 2 && lCol === 1)){
+               const emptyCorners = getEmptyCorners(empty)
+                const requiredPositions = [] ;
+                for(const corner of emptyCorners)
+                {
+                    const {row ,col } =corner;
+                    if(row !== lRow && col !==lCol)
+                      requiredPositions.push({row,col});
+                }
+                 const random = Math.floor(Math.random() * requiredPositions.length);
+                 const {row,col}=requiredPositions[random];
+           
+                  return {row,col};
+          }
+          else {
+              const emptyCorners = getEmptyCorners(empty)
+                const requiredPositions = [] ;
+                for(const corner of emptyCorners)
+                {
+                    const {row ,col } =corner;
+                    if(Math.abs(row - lRow) === 2 && Math.abs(col - lCol)===2)
+                      requiredPositions.push({row,col});
+                }
+                 setFlag(1);
+                 const {row,col}=requiredPositions[0];
+                 return {row,col};
+          }
+        }
+        if(flag){
+          if(selections.length === 4){
+            if((Math.abs(selections[2].block.row - lRow) === 2 && Math.abs(selections[2].block.col - lCol) === 1) || (Math.abs(selections[2].block.row - lRow) === 1 && Math.abs(selections[2].block.col - lCol) === 2) ){
+              const emptyCorners =getEmptyCorners(empty);
+              setFlag(0);
+              for(const corner of emptyCorners)
+              {
+                const {row,col} =corner
+                if(row !== lRow && col !== lCol)
+                  return {row,col}
+              }
+            }
+          }
+
+        }
+         const random = Math.floor(Math.random() * empty.length);
+            const {row,col}=empty[random];
+           
+            return {row,col};
 
 
 
-
-
+     }
   }
   useEffect( ( ) => { 
     const currentPlayer = handleActivePlayer(selections);
@@ -277,8 +318,7 @@ function App() {
       }
 
       if(empty.length > 0){
-       // const random = Math.floor(Math.random() * empty.length);
-       // const {row,col}=empty[random];
+     
       const {row,col}= handleComputerMove(empty,board);
 
         const timeout = setTimeout(()=>{handleSelection(row,col)}, 500);
@@ -286,6 +326,44 @@ function App() {
       }
     }
   } , [selections]);
+
+ 
+  const handleWinner =() =>{
+      const board=boardSetup();
+      let winner ;
+      for(const win_case of winning_cases ){
+        const firstSymbol = board[win_case[0].row][win_case[0].col];
+        const secondSymbol = board[win_case[1].row][win_case[1].col];
+        const thirdSymbol = board[win_case[2].row][win_case[2].col];
+      
+
+      if(firstSymbol && (firstSymbol === secondSymbol) && (firstSymbol === thirdSymbol))
+      {
+        if(firstSymbol === 'X')
+          winner = 1
+        else
+         winner = 2
+      }
+    }
+
+      return winner;
+  }
+
+  const winner = handleWinner();
+  
+  const isDraw = selections.length === 9 && !winner;
+
+  const handleRestart = () =>{
+    
+    setSelections([]);
+    setFlag(0);
+    setInitialPlayer((prevPlayer) => {
+      if(prevPlayer === 'X')
+        return 'O'
+      else
+       return 'X'
+    })
+  }
 
 
   return (

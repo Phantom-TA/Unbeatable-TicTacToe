@@ -3,7 +3,7 @@ const Gameover = ({winner , restart}) =>{
             <div className="game-over">
                 <h2>Game Over!</h2>
                  {winner && <p>{winner===1 ? "You won!" : "Computer Won!"}</p> }
-                 {!winner && <p>Its a draw!</p>}
+                 {!winner && <p>It's a draw!</p>}
 
                 <p>
                     <button onClick={()=>restart()}>Restart</button>
