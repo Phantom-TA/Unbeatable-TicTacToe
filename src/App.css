@@ -109,6 +109,20 @@ ol {
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+@media (max-width: 600px) {
+  .game-container {
+    transform: scale(0.9);
+    height: 18.4rem;
+  }
+  .game-board{
+     gap: 0.3rem;
+  }
+  .game-board ol{
+    gap: 0.3rem;
+  }
+ 
+}
 .game-over{
    position: absolute;
    top: 0;
