@@ -4,6 +4,7 @@ import './App.css'
 import GameBoard from './components/GameBoard.jsx';
 import { winning_cases } from './utils/winning_cases.js';
 import Gameover from './components/GameOver.jsx';
+import Header from './components/Header.jsx';
 
 function App() {
   const [selections ,setSelections] =useState([]);
@@ -321,7 +322,7 @@ function App() {
      
       const {row,col}= handleComputerMove(empty,board);
 
-        const timeout = setTimeout(()=>{handleSelection(row,col)}, 500);
+        const timeout = setTimeout(()=>{handleSelection(row,col)}, 300);
         return () => clearTimeout(timeout);
       }
     }
@@ -368,9 +369,10 @@ function App() {
 
   return (
     <div className='home-page'>
+      <Header />
       <div className='game-container' > 
         { (winner || isDraw) && <Gameover winner={winner} restart ={handleRestart}/>}
-        <GameBoard  onSelect={handleSelection} board={boardSetup()}/>
+        <GameBoard  onSelect={handleSelection} board={boardSetup() } isDisabled={handleActivePlayer(selections) === 'O'}/>
       </div>
     </div>
   )

@@ -11,15 +11,45 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(to right bottom, #b3577a, #b445b4,#5f3daa,#491caa);
+    
+    background: linear-gradient(to right bottom, #8f49b1, #863cb1,#5f3daa,#491caa);
 
 }
+.header{
+   box-sizing: border-box;
+   max-height: 180px;
+   display: flex;
+   align-items: start;
+    margin-bottom: 50px;
+    justify-content: space-between;
+    padding: 30px 40px 30px 40px;
+
+}
+
+.logo{
+    box-sizing: border-box;
+     display: flex;
+     flex-direction: row;
+    height: 3rem;
+}
+.logo-name{
+   
+   
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px; 
+    margin-left: 8px;
+    margin-bottom: 2px;
+   
+}
+
+
 .game-container{
   height: 20rem;
   max-width: 45rem;
-  
+  align-self: center;
   
   padding: 2rem;
    

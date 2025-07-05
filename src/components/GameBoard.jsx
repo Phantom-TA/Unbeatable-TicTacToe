@@ -1,4 +1,4 @@
-const GameBoard =({onSelect , board})=>{
+const GameBoard =({onSelect , board , isDisabled})=>{
         return(
             <ol className="game-board">
                 {
@@ -8,7 +8,7 @@ const GameBoard =({onSelect , board})=>{
                                 {
                                     row.map((symbol,colInd)=>(
                                         <li key={colInd}>
-                                            <button onClick={()=>onSelect(rowInd,colInd)} disabled={symbol!==null}>{symbol}</button>
+                                            <button onClick={()=>onSelect(rowInd,colInd)} disabled={symbol!==null || isDisabled}>{symbol}</button>
                                         </li>
                                     ))
                                 }
