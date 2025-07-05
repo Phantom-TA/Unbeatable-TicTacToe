@@ -114,6 +114,21 @@ ol {
   .game-container {
     transform: scale(0.9);
     height: 18.4rem;
+    padding: 1rem;
+  }
+  .game-board{
+     gap: 0.3rem;
+  }
+  .game-board ol{
+    gap: 0.3rem;
+  }
+ 
+}
+@media (max-width: 350px) {
+  .game-container {
+    transform: scale(0.9);
+    height: 18.4rem;
+    padding: 0.3rem;
   }
   .game-board{
      gap: 0.3rem;
