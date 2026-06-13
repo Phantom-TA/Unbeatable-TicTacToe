@@ -1,6 +1,6 @@
 # 🎮 ImpossibleXO — Unbeatable Tic-Tac-Toe
 
-**ImpossibleXO** is a premium, fully responsive, unbeatable Tic-Tac-Toe web application. Built with **React 19** and **Vite 7**, it features an advanced deterministic AI engine that maps out every possible game scenario, making it mathematically impossible for a human player to defeat the computer.
+**ImpossibleXO** is a premium,fully responsive, unbeatable Tic-Tac-Toe web application. Built with **React 19** and **Vite 7**, it features an advanced deterministic AI engine that maps out every possible game scenario, making it mathematically impossible for a human player to defeat the computer.
 
 ---
 
